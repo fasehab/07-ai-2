@@ -11,22 +11,36 @@ execute:
 suppressPackageStartupMessages(library(tidyverse))
 ```
 
-## Named Storms Per Year
+## Named Storms Per Year by Type
 
-The following visualization displays the number of unique named storms per year in the `dplyr::storms` dataset.
+The following visualization displays the number of unique named storms per year, broken down by storm type (tropical depressions, tropical storms, and hurricanes), in the `dplyr::storms` dataset.
 
 ```{r plot-storms}
 storms |> 
-  group_by(year) |> 
-  summarize(n_storms = n_distinct(name)) |> 
-  ggplot(aes(x = year, y = n_storms)) +
-  geom_line(color = "steelblue", linewidth = 1) +
-  geom_point(color = "darkblue", size = 2) +
+  filter(status %in% c("tropical depression", "tropical storm", "hurricane")) |> 
+  mutate(status = factor(status, levels = c("tropical depression", "tropical storm", "hurricane"))) |> 
+  group_by(year, status) |> 
+  summarize(n_storms = n_distinct(name), .groups = "drop") |> 
+  ggplot(aes(x = year, y = n_storms, fill = status)) +
+  geom_area(position = "stack", alpha = 0.85) +
+  scale_fill_manual(
+    values = c(
+      "tropical depression" = "#9ecae1", # Light Blue
+      "tropical storm" = "#fdae61",      # Orange
+      "hurricane" = "#d73027"            # Dark Red
+    ),
+    labels = c(
+      "tropical depression" = "Tropical Depression",
+      "tropical storm" = "Tropical Storm",
+      "hurricane" = "Hurricane"
+    )
+  ) +
   theme_minimal() +
   labs(
-    title = "Number of Named Storms per Year",
+    title = "Number of Named Storms per Year by Type",
     subtitle = "Data source: dplyr::storms",
     x = "Year",
-    y = "Number of Named Storms"
+    y = "Number of Named Storms",
+    fill = "Storm Type"
   )
 ```
