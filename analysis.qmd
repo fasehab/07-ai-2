@@ -1,0 +1,32 @@
+---
+title: "Exploring Storms"
+author: "fasehab"
+format: html
+execute:
+  echo: false
+---
+
+```{r setup}
+#| include: false
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+## Named Storms Per Year
+
+The following visualization displays the number of unique named storms per year in the `dplyr::storms` dataset.
+
+```{r plot-storms}
+storms |> 
+  group_by(year) |> 
+  summarize(n_storms = n_distinct(name)) |> 
+  ggplot(aes(x = year, y = n_storms)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_point(color = "darkblue", size = 2) +
+  theme_minimal() +
+  labs(
+    title = "Number of Named Storms per Year",
+    subtitle = "Data source: dplyr::storms",
+    x = "Year",
+    y = "Number of Named Storms"
+  )
+```

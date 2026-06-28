@@ -1,0 +1,18 @@
+# Quarto cache, build, and temporary directories
+.quarto/
+*_files/
+*_cache/
+_publish.yml
+
+# R project files and history
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.Rprofile
+.Rresources
+write-only/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
